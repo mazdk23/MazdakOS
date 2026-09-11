@@ -1,160 +1,161 @@
-# MazdakOS
+# MazdakOS v0.2
 
-MazdakOS is a small educational operating system project for learning how a computer boots into a custom kernel and how low-level software interacts directly with x86 hardware.
+## Experimental x86 Operating System Kernel
 
-Version **v0.1** is intentionally small. It boots through a Multiboot-compatible bootloader, switches into a simple 32-bit kernel entry path, initializes a stack, calls a freestanding C++ kernel, and writes text directly to the VGA text buffer.
+MazdakOS is an educational operating system kernel project created to
+explore low-level programming, operating system concepts, and computer
+architecture.
 
-## Current status — v0.1
+The goal of this project is to understand how software interacts with
+computer hardware by building system components from the ground up.
 
-Implemented:
+------------------------------------------------------------------------
 
-- Multiboot header
-- 32-bit x86 startup code
-- Assembly entry point
-- Freestanding C++ kernel entry point
-- Basic stack setup
-- VGA text-mode output
-- Basic kernel initialization message
+## Project Goals
 
-Not implemented yet:
+MazdakOS v0.2 focuses on moving from a simple kernel output prototype
+toward an interactive operating system environment.
 
-- Keyboard input
-- Interrupt Descriptor Table (IDT)
-- Hardware interrupts
-- Command shell
-- Dynamic memory management
-- Timer driver
-- Filesystem
-- User-mode programs
+Main objectives:
 
-These are planned features and are not presented as completed functionality.
+-   Keyboard input support
+-   Terminal system
+-   Basic command shell
+-   Improved kernel structure
+-   Better separation between system components
 
-## Project structure
+------------------------------------------------------------------------
 
-```text
-MazdakOS/
-├── boot/
-│   └── boot.asm
-├── kernel/
-│   └── kernel.cpp
-├── linker.ld
-├── Makefile
-├── README.md
-└── .gitignore
-```
+## Current Version
 
-## How it works
+### MazdakOS v0.2 - Interactive Kernel Prototype
 
-The boot process in v0.1 is:
+Planned features:
 
-1. A Multiboot-compatible bootloader such as GRUB loads the kernel.
-2. Execution begins at `_start` in `boot/boot.asm`.
-3. The assembly code initializes the stack.
-4. `_start` calls the C++ function `kernel_main`.
-5. The kernel clears the VGA text buffer at physical address `0xB8000`.
-6. The kernel prints a short startup message.
-7. Control returns to the assembly code, which halts the CPU.
+-   x86 boot process
+-   VGA text-mode output
+-   Keyboard driver
+-   Terminal interface
+-   Basic shell commands
 
-## Build requirements
+------------------------------------------------------------------------
 
-The Makefile expects a cross-compiler toolchain so the kernel is not accidentally linked against the host operating system.
+## Technologies
 
-Typical tools:
+-   C++
+-   x86 Assembly
+-   NASM
+-   GRUB Multiboot
+-   QEMU
+-   GNU development tools
 
-- `nasm`
-- `i686-elf-g++`
-- GRUB utilities (`grub-file`, `grub-mkrescue`)
-- `xorriso`
-- `qemu-system-i386`
+------------------------------------------------------------------------
 
-The exact package names depend on the host operating system.
+## Project Structure
 
-## Build
+    MazdakOS/
 
-```bash
+    ├── boot/
+    │   └── boot.asm
+
+    ├── kernel/
+    │   ├── kernel.cpp
+    │   ├── terminal.cpp
+    │   └── keyboard.cpp
+
+    ├── Makefile
+    ├── README.md
+    └── .gitignore
+
+------------------------------------------------------------------------
+
+## Architecture Overview
+
+    Hardware
+       |
+       v
+    Bootloader (GRUB)
+       |
+       v
+    Kernel Entry
+       |
+       v
+    Terminal System
+       |
+       v
+    Keyboard Input
+       |
+       v
+    Shell
+
+------------------------------------------------------------------------
+
+## Future Roadmap
+
+### v0.3
+
+-   Interrupt Descriptor Table (IDT)
+-   Hardware interrupts
+-   Timer support
+
+### v0.4
+
+-   Memory management
+-   Heap allocation
+-   Paging concepts
+
+### v0.5
+
+-   Basic filesystem concepts
+
+### v1.0
+
+-   Graphical interface
+-   Window system
+-   User applications
+
+------------------------------------------------------------------------
+
+## Building and Running
+
+The project is developed for x86 architecture.
+
+Required tools:
+
+-   Cross compiler for x86
+-   NASM
+-   GRUB tools
+-   QEMU
+
+Example:
+
+``` bash
 make
+qemu-system-i386 -cdrom MazdakOS.iso
 ```
 
-The kernel binary is generated at:
+------------------------------------------------------------------------
 
-```text
-build/mazdakos.bin
-```
+## Educational Purpose
 
-To verify the Multiboot header:
+MazdakOS is not intended to replace existing operating systems.
 
-```bash
-make check
-```
+The purpose of this project is learning:
 
-To build a bootable ISO:
+-   How computers boot
+-   How kernels communicate with hardware
+-   How operating systems manage resources
+-   How low-level software is designed
 
-```bash
-make iso
-```
+------------------------------------------------------------------------
 
-To run it in QEMU:
+## Developer
 
-```bash
-make run
-```
+Mazdak Alikarami
 
-## Expected output
+Interests: - Operating Systems - Systems Programming - Computer
+Architecture - Software Development
 
-After booting, the VGA text screen should display:
+GitHub: https://github.com/mazdk23
 
-```text
-MazdakOS v0.1
-----------------
-32-bit x86 freestanding C++ kernel
-Kernel initialized successfully.
-```
-
-## Technical notes
-
-### Multiboot
-
-The kernel contains the Multiboot magic value, flags, and checksum expected by compatible bootloaders.
-
-### Freestanding C++
-
-The kernel is compiled without a normal hosted C++ runtime. Features such as exceptions and RTTI are disabled, and the code does not depend on the standard library.
-
-### VGA text mode
-
-Text is written directly into VGA text memory at:
-
-```text
-0xB8000
-```
-
-Each VGA text cell is represented by two bytes: one byte for the character and one byte for its color attributes.
-
-## Roadmap
-
-Planned development order:
-
-1. Keyboard driver
-2. Interrupt Descriptor Table (IDT)
-3. Basic command shell
-4. Memory management
-5. Programmable Interval Timer
-6. Simple filesystem
-7. User-mode programs
-
-Each roadmap item will only be moved into the implemented feature list after it exists in the code and has been tested.
-
-## Learning goals
-
-MazdakOS is an educational project. The main goal is to understand:
-
-- the early boot process
-- x86 execution at a low level
-- assembly/C++ interaction
-- freestanding software development
-- memory-mapped hardware access
-- how an operating system kernel grows from a minimal entry point
-
-## License
-
-This project is currently provided for educational and portfolio purposes.
+Project: https://github.com/mazdk23/MazdakOS
